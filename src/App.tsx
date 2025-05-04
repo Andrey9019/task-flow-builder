@@ -1,5 +1,5 @@
 function App() {
-  return;
+  return <p>text</p>;
 }
 
 export default App;
