@@ -1,3 +1,4 @@
+import React from "react";
 import { useCallback } from "react";
 import { Handle, Position } from "@xyflow/react";
 import { useAppDispatch } from "../../store/hooks";
@@ -14,7 +15,7 @@ export function TaskNode({ id, data }: TaskNodeProps) {
   const dispatch = useAppDispatch();
 
   const onChange = useCallback(
-    (evt) => {
+    (evt: React.ChangeEvent<HTMLInputElement>) => {
       dispatch(updateLabel({ nodesId: id, label: evt.target.value }));
     },
     [dispatch, id]

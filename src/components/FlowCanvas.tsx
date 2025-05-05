@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   ReactFlow,
   Controls,
@@ -24,6 +24,7 @@ import { setInitialEdges, updateEdges, addEdge } from "../store/edgesSlice";
 import { setSelectedNode } from "../store/selectedNodeSlice";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { RootState } from "../store";
 
 import { loadFromLocalStorage, saveToLocalStorage } from "../utils/localStore";
 
@@ -35,9 +36,11 @@ export default function FlowCanvas() {
   const nodes = useAppSelector((state) => state.nodes);
   const edges = useAppSelector((state) => state.edges);
 
-  const selectedNode = useAppSelector((state) => state.selectedNode);
+  const selectedNode = useAppSelector(
+    (state: RootState) => state.selectedNode
+  ) as Node | null;
 
-  const [inputValue, setInputValue] = useState(selectedNode?.data.label || "");
+  const [inputValue, setInputValue] = useState<string>(selectedNode?.data?.label?.toString() || "");
 
   const dispatch = useAppDispatch();
 
@@ -52,7 +55,7 @@ export default function FlowCanvas() {
   }, [nodes, edges]);
 
   useEffect(() => {
-    setInputValue(selectedNode?.data.label || "");
+    setInputValue(selectedNode?.data?.label?.toString() || "");
   }, [selectedNode]);
 
   const onConnect = useCallback(
@@ -93,7 +96,7 @@ export default function FlowCanvas() {
   };
 
   const onNodeClick = useCallback(
-    (_, node: Node) => {
+    (_: React.MouseEvent, node: Node) => {
       dispatch(setSelectedNode(node));
     },
     [dispatch]
