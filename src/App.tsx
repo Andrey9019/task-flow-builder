@@ -1,5 +1,7 @@
+import FlowCanvas from "./components/FlowCanvas";
+
 function App() {
-  return <p>text</p>;
+  return <FlowCanvas />;
 }
 
 export default App;
