@@ -32,7 +32,7 @@ export function TaskNode({ id, data }: TaskNodeProps) {
           className="border px-2 py-1 rounded"
         />
       </div>
-      <Handle type="source" position={Position.Bottom} id="a" />
+      <Handle type="source" position={Position.Bottom} id="a" className="" />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ReactFlow,
   Controls,
@@ -11,13 +11,20 @@ import {
 } from "@xyflow/react";
 
 import { TaskNode } from "./nodes/TaskNode";
+import { nanoid } from "nanoid";
 import "@xyflow/react/dist/style.css";
 
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { addNode, setInitialNodes, updatePosition } from "../store/nodesSlice";
+import {
+  addNode,
+  setInitialNodes,
+  updateLabel,
+  updatePosition,
+} from "../store/nodesSlice";
 import { setInitialEdges, updateEdges, addEdge } from "../store/edgesSlice";
+import { setSelectedNode } from "../store/selectedNodeSlice";
 
-import { nanoid } from "nanoid";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+
 import { loadFromLocalStorage, saveToLocalStorage } from "../utils/localStore";
 
 const nodeTypes = {
@@ -28,11 +35,14 @@ export default function FlowCanvas() {
   const nodes = useAppSelector((state) => state.nodes);
   const edges = useAppSelector((state) => state.edges);
 
+  const selectedNode = useAppSelector((state) => state.selectedNode);
+
+  const [inputValue, setInputValue] = useState(selectedNode?.data.label || "");
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const { nodes, edges } = loadFromLocalStorage();
-    console.log(nodes, edges);
     dispatch(setInitialNodes(nodes));
     dispatch(setInitialEdges(edges));
   }, [dispatch]);
@@ -40,6 +50,10 @@ export default function FlowCanvas() {
   useEffect(() => {
     saveToLocalStorage(nodes, edges);
   }, [nodes, edges]);
+
+  useEffect(() => {
+    setInputValue(selectedNode?.data.label || "");
+  }, [selectedNode]);
 
   const onConnect = useCallback(
     (params: Connection) => {
@@ -78,8 +92,24 @@ export default function FlowCanvas() {
     dispatch(addNode(newNode));
   };
 
+  const onNodeClick = useCallback(
+    (_, node: Node) => {
+      dispatch(setSelectedNode(node));
+    },
+    [dispatch]
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    if (selectedNode) {
+      dispatch(
+        updateLabel({ nodesId: selectedNode.id, label: e.target.value })
+      );
+    }
+  };
+
   return (
-    <div className="w-full h-screen">
+    <div className="w-full h-screen ">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -87,14 +117,40 @@ export default function FlowCanvas() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        onNodeClick={onNodeClick}
       >
         <Controls />
         <Background gap={12} size={1} />
         <Panel position="top-center">
-          <button onClick={handleAddNode} className="xy-theme__select">
+          <button
+            onClick={handleAddNode}
+            className="xy-theme__select cursor-pointer"
+          >
             Add Task
           </button>
         </Panel>
+
+        {selectedNode && (
+          <Panel
+            position="top-right"
+            className="border w-64 bg-gray-100 shadow-md m-5 p-4 h-48 flex flex-col rounded-3xl relative"
+          >
+            <h2 className="text-lg font-semibold text-center">Edit a task</h2>
+            <button
+              className="absolute bottom-3 right-3 text-gray-500 hover:text-black border rounded-full p-1"
+              onClick={() => dispatch(setSelectedNode(null))}
+            >
+              Close
+            </button>
+
+            <input
+              type="text"
+              onChange={handleInputChange}
+              value={inputValue}
+              className="border px-2 py-1 rounded"
+            />
+          </Panel>
+        )}
       </ReactFlow>
     </div>
   );
