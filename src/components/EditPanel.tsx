@@ -31,11 +31,13 @@ export default function EditPanel({ selectedNode }: EditPanelProps) {
   return (
     <Panel
       position="top-right"
-      className="border w-64 bg-gray-100 shadow-md m-5 p-4 h-48 flex flex-col rounded-3xl relative"
+      className="border w-96 h-64 border-gray-200 bg-white shadow-md !m-8 p-6 flex flex-col rounded-2xl relative"
     >
-      <h2 className="text-lg font-semibold text-center">Edit a task</h2>
+      <h2 className="text-4xl font-semibold text-gray-700 text-center mb-2">
+        Edit a task
+      </h2>
       <button
-        className="absolute bottom-3 right-3 text-gray-500 hover:text-black border rounded-full p-1"
+        className="absolute bottom-3 right-3 bg-white border border-gray-300 hover:border-gray-500 text-gray-800 hover:text-black font-medium px-8 py-3 rounded-xl shadow-sm hover:shadow "
         onClick={() => dispatch(setSelectedNode(null))}
       >
         Close
@@ -45,7 +47,7 @@ export default function EditPanel({ selectedNode }: EditPanelProps) {
         type="text"
         onChange={handleInputChange}
         value={inputValue}
-        className="border px-2 py-1 rounded"
+        className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:border-blue-500"
       />
     </Panel>
   );

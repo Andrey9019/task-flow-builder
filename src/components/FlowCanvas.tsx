@@ -36,7 +36,7 @@ export default function FlowCanvas() {
   } = useFlowAction();
 
   return (
-    <div className="w-full h-screen ">
+    <div className="w-full h-screen bg-teal-50">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -48,10 +48,10 @@ export default function FlowCanvas() {
       >
         <Controls />
         <Background gap={12} size={1} />
-        <Panel position="top-center">
+        <Panel position="top-left">
           <button
             onClick={handleAddNode}
-            className="xy-theme__select cursor-pointer"
+            className="cursor-pointer bg-white border border-gray-300 hover:border-gray-500 text-gray-800 hover:text-black font-medium px-10 py-4 rounded-xl shadow-sm hover:shadow transition duration-200"
           >
             Add Task
           </button>

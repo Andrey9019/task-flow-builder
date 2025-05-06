@@ -22,18 +22,27 @@ export function TaskNode({ id, data }: TaskNodeProps) {
   );
 
   return (
-    <div className="p-2 border">
-      <Handle type="target" position={Position.Top} />
-      <div>
-        <input
-          id="text"
-          name="text"
-          onChange={onChange}
-          value={data.label}
-          className="border px-2 py-1 rounded"
-        />
-      </div>
-      <Handle type="source" position={Position.Bottom} id="a" className="" />
+    <div className="p-3 bg-white border border-gray-300 rounded-xl shadow-sm hover:shadow-md">
+      <Handle
+        type="target"
+        position={Position.Top}
+        className="!w-1/5 !bg-teal-500 !border-0"
+      />
+
+      <input
+        id="text"
+        name="text"
+        onChange={onChange}
+        value={data.label}
+        className="border border-gray-300 rounded-md px-3 py-1 w-full focus:outline-none focus:border-blue-500"
+      />
+
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        id="a"
+        className="!w-1/5 !bg-teal-700 !border-0"
+      />
     </div>
   );
 }
