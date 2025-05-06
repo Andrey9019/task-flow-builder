@@ -23,7 +23,7 @@ export const useFlowAction = () => {
       id: nanoid(),
       type: "taskNodes",
       data: { label: "New Task" },
-      position: { x: 30, y: 30 },
+      position: { x: 30, y: 200 },
     };
     dispatch(addNode(newNode));
   };
