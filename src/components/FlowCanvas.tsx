@@ -46,7 +46,7 @@ export default function FlowCanvas() {
         nodeTypes={nodeTypes}
         onNodeClick={onNodeClick}
       >
-        <Controls />
+        <Controls position="center-left" />
         <Background gap={12} size={1} />
         <Panel position="top-left">
           <button
